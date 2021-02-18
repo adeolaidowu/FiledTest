@@ -25,13 +25,15 @@ namespace FiledTest.Services
             if (!CreditCard.ValidateCardNumber(payment.CreditCardNumber) || !payment.ExpirationDate.IsNotExpired())
                 return false;
             await _context.Payments.AddAsync(_mapper.Map<Payment>(payment));
-            int paymentId = _context.Payments.OrderBy(x => x.Id).LastOrDefault().Id;
+            int paymentId;
             if (await _context.SaveChangesAsync() > 0)
             {
+                paymentId = _context.Payments.OrderBy(x => x.Id).LastOrDefault().Id;
                 await _context.PaymentStatus.AddAsync(new PaymentStatus { PaymentId = paymentId, PaymentState = "Processed" });
                 await _context.SaveChangesAsync();
                 return true;
             }
+            paymentId = _context.Payments.OrderBy(x => x.Id).LastOrDefault().Id;
             await _context.PaymentStatus.AddAsync(new PaymentStatus { PaymentId = paymentId, PaymentState = "Failed" });
             await _context.SaveChangesAsync();
             return false;
@@ -42,13 +44,15 @@ namespace FiledTest.Services
             if (!CreditCard.ValidateCardNumber(payment.CreditCardNumber) || !payment.ExpirationDate.IsNotExpired())
                 return false;
             await _context.Payments.AddAsync(_mapper.Map<Payment>(payment));
-            int paymentId = _context.Payments.OrderBy(x => x.Id).LastOrDefault().Id;
+            int paymentId;
             if (await _context.SaveChangesAsync() > 0)
             {
+                paymentId =  _context.Payments.OrderBy(x => x.Id).LastOrDefault().Id;
                 await _context.PaymentStatus.AddAsync(new PaymentStatus { PaymentId = paymentId, PaymentState = "Processed" });
                 await _context.SaveChangesAsync();
                 return true;
             }
+            paymentId = _context.Payments.OrderBy(x => x.Id).LastOrDefault().Id;
             await _context.PaymentStatus.AddAsync(new PaymentStatus { PaymentId = paymentId, PaymentState = "Failed" });
             await _context.SaveChangesAsync();
             return false;
